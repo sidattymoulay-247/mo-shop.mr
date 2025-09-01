@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Nouakchott Tech & Home – Online Catalog (MRU)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Phones, accessories, small solar, home & kitchen. Order via WhatsApp, pay on delivery in Mauritania.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="container">
+  <div class="brand">
+    <img src="assets/logo.png" alt="Brand logo" onerror="this.style.display='none'">
+    <div>
+      <h1>Nouakchott Tech & Home</h1>
+      <p>Order via WhatsApp • Cash on Delivery • ETA shown per item</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Search products…" aria-label="Search">
+    <select id="category">
+      <option value="">All categories</option>
+      <option>Phones & Accessories</option>
+      <option>Solar & Power</option>
+      <option>Home & Kitchen</option>
+      <option>Networking & CCTV</option>
+      <option>Fashion & Gifts</option>
+    </select>
+    <select id="sort">
+      <option value="">Sort</option>
+      <option value="price-asc">Price ↑</option>
+      <option value="price-desc">Price ↓</option>
+      <option value="newest">Newest</option>
+    </select>
+  </div>
+</header>
+
+<main class="container">
+  <div id="grid" class="grid" aria-live="polite"></div>
+  <p id="empty" class="muted" hidden>No products found. Try another search or category.</p>
+</main>
+
+<footer class="container footer">
+  <p><strong>How to order:</strong> open a product → tap “Order on WhatsApp” → send your name, address, and delivery city. We confirm price in MRU and ETA. Pay on delivery.</p>
+  <p>Delivery: Nouakchott (courier/taxi). Other cities via transport station. 7-day limited warranty for manufacturing defects (no water/impact).</p>
+  <p>© <span id="year"></span> Nouakchott Tech & Home</p>
+</footer>
+
+<script>
+  // ---- Settings ----
+  const WHATSAPP_NUMBER = "22248440446"; // your number without +
+  const CURRENCY = "MRU";
+
+  // ---- Helpers ----
+  const fmt = (n) => new Intl.NumberFormat('en-MR').format(n);
+
+  const waLink = (p) => {
+    const msg =
+`[Order]
+Product: ${p.name}
+SKU: ${p.id}
+Price: ${fmt(p.price_mru)} ${CURRENCY}
+Variant: ${p.variant ?? "Default"}
+Qty: 1
+City: 
+Name: 
+Phone: 
+Address: `;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  };
+
+  // ---- Render ----
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const search = document.getElementById('search');
+  const category = document.getElementById('category');
+  const sort = document.getElementById('sort');
+
+  let PRODUCTS = [];
+
+  function cardHTML(p) {
+    const eta = p.eta || "";
+    const preorder = p.preorder ? `<span class="badge warn">Pre-order</span>` : "";
+    const img = (p.images && p.images[0]) ? p.images[0] : "assets/placeholder.jpg";
+    return `
+    <article class="card">
+      <div class="thumb">
+        <img src="${img}" alt="${p.name}">
+        ${preorder}
+        ${eta ? `<span class="badge">${eta}</span>` : ""}
+      </div>
+      <div class="card-body">
+        <h3 title="${p.name}">${p.name}</h3>
+        <p class="price">${fmt(p.price_mru)} <span class="cur">${CURRENCY}</span></p>
+        <p class="muted small">${p.category}</p>
+        <p class="desc">${p.description || ""}</p>
+        <a class="btn" href="${waLink(p)}" target="_blank" rel="noopener">Order on WhatsApp</a>
+      </div>
+    </article>`;
+  }
+
+  function applyFilters() {
+    const q = search.value.trim().toLowerCase();
+    const cat = category.value;
+    let items = PRODUCTS.slice();
+
+    if (q) items = items.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (p.description||"").toLowerCase().includes(q)
+    );
+    if (cat) items = items.filter(p => p.category === cat);
+
+    if (sort.value === "price-asc") items.sort((a,b)=>a.price_mru-b.price_mru);
+    if (sort.value === "price-desc") items.sort((a,b)=>b.price_mru-a.price_mru);
+    if (sort.value === "newest") items.sort((a,b)=> (b.created || 0) - (a.created || 0));
+
+    grid.innerHTML = items.map(cardHTML).join("");
+    empty.hidden = items.length !== 0;
+  }
+
+  fetch('products.json')
+    .then(r => r.json())
+    .then(data => { PRODUCTS = data; applyFilters(); });
+
+  [search, category, sort].forEach(el => el.addEventListener('input', applyFilters));
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
