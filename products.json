@@ -7,7 +7,7 @@
     "eta": "Standard 14–25d",
     "preorder": false,
     "description": "Durable fabric, padded straps, front zip pocket; ideal for school or commuting.",
-    "images": ["assets/bags.jpg"],
+    "images": ["assets/bags.jpeg"],
     "created": 20250901
   },
   {
@@ -18,7 +18,7 @@
     "eta": "Express 8–12d",
     "preorder": false,
     "description": "Large-capacity toiletries/makeup bag with multiple compartments; water-resistant.",
-    "images": ["assets/bag-home.jpeg"],
+    "images": ["assets/bag-home.jpg"],
     "created": 20250901
   },
   {
@@ -44,3 +44,4 @@
     "created": 20250901
   }
 ]
+
