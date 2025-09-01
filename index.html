@@ -1,130 +1,395 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <title>Nouakchott Tech & Home – Online Catalog (MRU)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Phones, accessories, small solar, home & kitchen. Order via WhatsApp, pay on delivery in Mauritania.">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>RIMSINA — Catalogue (MRU)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Commandez par WhatsApp • Paiement à la livraison • Express 8–12 j / Standard 14–25 j. Téléphones, accessoires, solaire, maison. Mauritanie." />
+
+  <!-- Social share -->
+  <meta property="og:title" content="RIMSINA — Catalogue (MRU)">
+  <meta property="og:description" content="WhatsApp • Paiement à la livraison • Express 8–12 j">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/share.jpg">
+
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="container">
-  <div class="brand">
-    <img src="assets/logo.png" alt="Brand logo" onerror="this.style.display='none'">
-    <div>
-      <h1>Nouakchott Tech & Home</h1>
-      <p>Order via WhatsApp • Cash on Delivery • ETA shown per item</p>
+  <!-- Announcement bar -->
+  <div class="announce" id="announce">
+    <div class="container"></div>
+  </div>
+
+  <!-- Header / brand + filters -->
+  <header class="container header">
+    <a class="logo" href="#">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <div>
+        <h1 data-brand>RIMSINA</h1>
+        <p class="muted" id="tagline"></p>
+      </div>
+    </a>
+
+    <!-- Language switch -->
+    <div class="lang-switch" role="group" aria-label="Choisir la langue">
+      <button id="btn-fr" class="lang active">FR</button>
+      <button id="btn-ar" class="lang">العربية</button>
     </div>
-  </div>
 
-  <div class="toolbar">
-    <input id="search" type="search" placeholder="Search products…" aria-label="Search">
-    <select id="category">
-      <option value="">All categories</option>
-      <option>Phones & Accessories</option>
-      <option>Solar & Power</option>
-      <option>Home & Kitchen</option>
-      <option>Networking & CCTV</option>
-      <option>Fashion & Gifts</option>
-    </select>
-    <select id="sort">
-      <option value="">Sort</option>
-      <option value="price-asc">Price ↑</option>
-      <option value="price-desc">Price ↓</option>
-      <option value="newest">Newest</option>
-    </select>
-  </div>
-</header>
+    <div class="toolbar" role="region" aria-label="Filtres produits">
+      <input id="search" type="search" placeholder="" aria-label="">
+      <select id="category" aria-label="">
+        <!-- options filled by JS -->
+      </select>
+      <select id="sort" aria-label="">
+        <!-- options filled by JS -->
+      </select>
+    </div>
+  </header>
 
-<main class="container">
-  <div id="grid" class="grid" aria-live="polite"></div>
-  <p id="empty" class="muted" hidden>No products found. Try another search or category.</p>
-</main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h2 id="hero-h"></h2>
+        <ul id="hero-bullets"></ul>
+        <a class="btn big" href="#grid" id="cta-browse"></a>
+      </div>
+      <div class="hero-art" aria-hidden="true">📦⚡📱</div>
+    </div>
+  </section>
 
-<footer class="container footer">
-  <p><strong>How to order:</strong> open a product → tap “Order on WhatsApp” → send your name, address, and delivery city. We confirm price in MRU and ETA. Pay on delivery.</p>
-  <p>Delivery: Nouakchott (courier/taxi). Other cities via transport station. 7-day limited warranty for manufacturing defects (no water/impact).</p>
-  <p>© <span id="year"></span> Nouakchott Tech & Home</p>
-</footer>
+  <!-- Category shortcuts -->
+  <section class="container cats" aria-label="Catégories" id="cat-chips">
+    <!-- chips filled by JS -->
+  </section>
 
-<script>
-  // ---- Settings ----
-  const WHATSAPP_NUMBER = "22248440446"; // your number without +
-  const CURRENCY = "MRU";
+  <!-- Product grid -->
+  <main class="container">
+    <h3 class="section-title" id="section-best"></h3>
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <p id="empty" class="muted" hidden></p>
+  </main>
 
-  // ---- Helpers ----
-  const fmt = (n) => new Intl.NumberFormat('en-MR').format(n);
+  <!-- How it works -->
+  <section class="how container">
+    <h3 class="section-title" id="section-how"></h3>
+    <div class="steps" id="how-steps"></div>
+  </section>
 
-  const waLink = (p) => {
-    const msg =
-`[Order]
-Product: ${p.name}
+  <!-- Trust badges -->
+  <section class="trust container" aria-label="Pourquoi nous choisir">
+    <div class="trust-item" id="t1"></div>
+    <div class="trust-item" id="t2"></div>
+    <div class="trust-item" id="t3"></div>
+    <div class="trust-item" id="t4"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="container footer">
+    <h4 id="footer-title"></h4>
+    <p id="footer-policy"></p>
+    <p id="footer-contact"></p>
+    <p>© <span id="year"></span> <span data-brand>RIMSINA</span></p>
+  </footer>
+
+  <!-- Sticky WhatsApp bubble -->
+  <a class="wa-bubble" href="https://wa.me/22248440446" target="_blank" aria-label="WhatsApp">🟢</a>
+
+  <!-- JS -->
+  <script>
+    // ===== Settings =====
+    const BRAND_NAME = "RIMSINA";
+    const WHATSAPP_NUMBER = "22248440446"; // your number without +
+    const CURRENCY = "MRU";
+
+    // Canonical categories (keys match products.json "category" values)
+    const CATS = [
+      { key: "Phones & Accessories", fr: "Téléphones & Accessoires", ar: "الهواتف والإكسسوارات", emoji: "📱" },
+      { key: "Solar & Power",        fr: "Solaire & Énergie",         ar: "الطاقة الشمسية والطاقة",  emoji: "🔋" },
+      { key: "Home & Kitchen",       fr: "Maison & Cuisine",          ar: "المنزل والمطبخ",         emoji: "🏠" },
+      { key: "Networking & CCTV",    fr: "Réseau & Caméras",          ar: "الشبكات والمراقبة",       emoji: "📶" },
+      { key: "Fashion & Gifts",      fr: "Mode & Cadeaux",            ar: "الموضة والهدايا",         emoji: "🎁" }
+    ];
+
+    // UI translations
+    const I18N = {
+      fr: {
+        announce: "🚚 Express 8–12 j • Standard 14–25 j • 💵 Paiement à la livraison (MRU)",
+        tagline: "Commande WhatsApp • Paiement à la livraison • Délai indiqué par article",
+        searchPH: "Rechercher un produit…",
+        searchAL: "Recherche de produits",
+        catAL: "Filtrer par catégorie",
+        sortAL: "Trier les produits",
+        sort: { label: "Trier", asc: "Prix ↑", desc: "Prix ↓", newest: "Nouveautés" },
+        heroH: "Commandez sur WhatsApp. Payez à la livraison.",
+        heroBullets: [
+          "Prix en MRU & délai de livraison indiqués",
+          "Précommandes depuis la Chine avec photos QC",
+          "Garantie 7 jours (défauts de fabrication)"
+        ],
+        browse: "Voir les meilleures ventes",
+        best: "Meilleures ventes",
+        empty: "Aucun produit trouvé. Essayez une autre recherche ou catégorie.",
+        how: "Comment ça marche",
+        howSteps: [
+          "1. Choisissez l’article & confirmez sur WhatsApp",
+          "2. Achat & contrôle qualité chez fournisseurs vérifiés",
+          "3. Livraison Express 8–12 j / Standard 14–25 j",
+          "4. Livraison en Mauritanie • Paiement à la livraison"
+        ],
+        trust: ["✅ Fournisseurs vérifiés","🛡️ Garantie défaut 7 jours","💬 Support local (Nouakchott)","💳 Prix clairs en MRU"],
+        footerTitle: "Livraison & Retours",
+        footerPolicy: "Livraison à Nouakchott (coursier/taxi) ; autres villes via gare routière. Retours : garantie défaut 7 jours (hors eau/choc). Les délais de précommande sont des estimations soumises aux douanes.",
+        footerContact: 'Contact : <a href="https://wa.me/22248440446" target="_blank" rel="noopener">WhatsApp 22 24 84 04 46</a> • Page Facebook',
+        preorder: "Précommande",
+        orderBtn: "Commander sur WhatsApp",
+        allCats: "Toutes les catégories"
+      },
+      ar: {
+        announce: "🚚 سريع 8–12 يوم • عادي 14–25 يوم • 💵 الدفع عند الاستلام (MRU)",
+        tagline: "الطلب عبر واتساب • الدفع عند الاستلام • يوضح زمن التسليم لكل منتج",
+        searchPH: "ابحث عن منتج…",
+        searchAL: "البحث عن المنتجات",
+        catAL: "تصفية حسب الصنف",
+        sortAL: "ترتيب المنتجات",
+        sort: { label: "ترتيب", asc: "السعر ↑", desc: "السعر ↓", newest: "الأحدث" },
+        heroH: "اطلب عبر واتساب. ادفع عند الاستلام.",
+        heroBullets: [
+          "أسعار بالـ MRU وزمن تسليم واضح",
+          "طلبات مسبقة من الصين مع صور فحص الجودة",
+          "ضمان 7 أيام لعيوب التصنيع"
+        ],
+        browse: "تصفح الأكثر طلبًا",
+        best: "الأكثر طلبًا",
+        empty: "لا توجد منتجات. جرّب بحثًا أو صنفًا آخر.",
+        how: "كيف تعمل الخدمة",
+        howSteps: [
+          "1. اختر المنتج و أكد الطلب عبر واتساب",
+          "2. نشتري ونفحص من موردين موثوقين",
+          "3. شحن سريع 8–12 يوم / عادي 14–25 يوم",
+          "4. تسليم داخل موريتانيا • الدفع عند الاستلام"
+        ],
+        trust: ["✅ موردون موثوقون","🛡️ ضمان عيوب 7 أيام","💬 دعم محلي (نواكشوط)","💳 أسعار واضحة بالـ MRU"],
+        footerTitle: "التسليم والإرجاع",
+        footerPolicy: "تسليم داخل نواكشوط عبر مندوب/تاكسي؛ ومدن أخرى عبر محطة النقل. الإرجاع: ضمان عيوب تصنيع لمدة 7 أيام (لا يشمل الماء/السقوط). أزمنة التسليم تقديرية وقد تتأثر بالجمارك.",
+        footerContact: 'للتواصل: <a href="https://wa.me/22248440446" target="_blank" rel="noopener">واتساب 22 24 84 04 46</a> • صفحة فيسبوك',
+        preorder: "طلب مسبق",
+        orderBtn: "اطلب عبر واتساب",
+        allCats: "كل الأصناف"
+      }
+    };
+
+    // Current language
+    let LANG = "ar"; // or "ar"
+    //let LANG = (navigator.language || "").startsWith("ar") ? "ar" : "fr";
+
+    // Helpers
+    function fmt(n){
+      const loc = LANG === "ar" ? "ar" : "fr";
+      try { return new Intl.NumberFormat(loc).format(n); }
+      catch { return new Intl.NumberFormat('fr-FR').format(n); }
+    }
+
+    function t(path){
+      // t('sort.label') etc.
+      return path.split('.').reduce((o,k)=> (o||{})[k], I18N[LANG]);
+    }
+
+    function catLabel(enName){
+      const c = CATS.find(x=>x.key===enName);
+      if(!c) return enName;
+      return LANG === "ar" ? c.ar : c.fr;
+    }
+
+    function waLink(p) {
+      const name = p[`name_${LANG}`] || p.name;
+      const msg = `[Order]
+${LANG==='ar' ? 'المنتج' : 'Produit'}: ${name}
 SKU: ${p.id}
-Price: ${fmt(p.price_mru)} ${CURRENCY}
-Variant: ${p.variant ?? "Default"}
-Qty: 1
-City: 
-Name: 
-Phone: 
-Address: `;
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-  };
+${LANG==='ar' ? 'السعر' : 'Prix'}: ${fmt(p.price_mru)} ${CURRENCY}
+${LANG==='ar' ? 'الكمية' : 'Qté'}: 1
+${LANG==='ar' ? 'المدينة' : 'Ville'}:
+${LANG==='ar' ? 'الاسم' : 'Nom'}:
+${LANG==='ar' ? 'الهاتف' : 'Téléphone'}:
+${LANG==='ar' ? 'العنوان' : 'Adresse'}:`;
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    }
 
-  // ---- Render ----
-  const grid = document.getElementById('grid');
-  const empty = document.getElementById('empty');
-  const search = document.getElementById('search');
-  const category = document.getElementById('category');
-  const sort = document.getElementById('sort');
+    // Inject UI text for current language
+    function renderStaticText(){
+      document.documentElement.lang = LANG === "ar" ? "ar" : "fr";
+      document.body.dir = LANG === "ar" ? "rtl" : "ltr";
+      document.body.classList.toggle('rtl', LANG === "ar");
 
-  let PRODUCTS = [];
+      document.querySelectorAll('[data-brand]').forEach(el => el.textContent = BRAND_NAME);
+      document.getElementById('year').textContent = new Date().getFullYear();
 
-  function cardHTML(p) {
-    const eta = p.eta || "";
-    const preorder = p.preorder ? `<span class="badge warn">Pre-order</span>` : "";
-    const img = (p.images && p.images[0]) ? p.images[0] : "assets/placeholder.jpg";
-    return `
-    <article class="card">
-      <div class="thumb">
-        <img src="${img}" alt="${p.name}">
-        ${preorder}
-        ${eta ? `<span class="badge">${eta}</span>` : ""}
-      </div>
-      <div class="card-body">
-        <h3 title="${p.name}">${p.name}</h3>
-        <p class="price">${fmt(p.price_mru)} <span class="cur">${CURRENCY}</span></p>
-        <p class="muted small">${p.category}</p>
-        <p class="desc">${p.description || ""}</p>
-        <a class="btn" href="${waLink(p)}" target="_blank" rel="noopener">Order on WhatsApp</a>
-      </div>
-    </article>`;
-  }
+      document.querySelector('.announce .container').textContent = t('announce');
+      document.getElementById('tagline').textContent = t('tagline');
 
-  function applyFilters() {
-    const q = search.value.trim().toLowerCase();
-    const cat = category.value;
-    let items = PRODUCTS.slice();
+      // Filters
+      const search = document.getElementById('search');
+      search.placeholder = t('searchPH');
+      search.setAttribute('aria-label', t('searchAL'));
+      document.getElementById('category').setAttribute('aria-label', t('catAL'));
+      document.getElementById('sort').setAttribute('aria-label', t('sortAL'));
 
-    if (q) items = items.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      (p.description||"").toLowerCase().includes(q)
-    );
-    if (cat) items = items.filter(p => p.category === cat);
+      // Build category select with canonical keys as values
+      const catSel = document.getElementById('category');
+      catSel.innerHTML = "";
+      const optAll = document.createElement('option');
+      optAll.value = "";
+      optAll.textContent = t('allCats');
+      catSel.appendChild(optAll);
+      CATS.forEach(c=>{
+        const o = document.createElement('option');
+        o.value = c.key; // canonical value, used for filtering
+        o.textContent = (LANG==='ar'? c.ar : c.fr);
+        catSel.appendChild(o);
+      });
 
-    if (sort.value === "price-asc") items.sort((a,b)=>a.price_mru-b.price_mru);
-    if (sort.value === "price-desc") items.sort((a,b)=>b.price_mru-a.price_mru);
-    if (sort.value === "newest") items.sort((a,b)=> (b.created || 0) - (a.created || 0));
+      // Sort select
+      const sortSel = document.getElementById('sort');
+      sortSel.innerHTML = "";
+      const s0 = new Option(t('sort.label'), "");
+      const s1 = new Option(t('sort.asc'), "price-asc");
+      const s2 = new Option(t('sort.desc'), "price-desc");
+      const s3 = new Option(t('sort.newest'), "newest");
+      [s0,s1,s2,s3].forEach(o=>sortSel.add(o));
 
-    grid.innerHTML = items.map(cardHTML).join("");
-    empty.hidden = items.length !== 0;
-  }
+      // Hero
+      document.getElementById('hero-h').textContent = t('heroH');
+      const ul = document.getElementById('hero-bullets');
+      ul.innerHTML = "";
+      t('heroBullets').forEach(li=>{
+        const el = document.createElement('li');
+        el.textContent = li;
+        ul.appendChild(el);
+      });
+      document.getElementById('cta-browse').textContent = t('browse');
 
-  fetch('products.json')
-    .then(r => r.json())
-    .then(data => { PRODUCTS = data; applyFilters(); });
+      // Category chips
+      const chips = document.getElementById('cat-chips');
+      chips.innerHTML = "";
+      CATS.forEach(c=>{
+        const a = document.createElement('a');
+        a.className = "cat";
+        a.dataset.cat = c.key; // filtering key
+        a.innerHTML = `${c.emoji}<span>${LANG==='ar'? c.ar : c.fr}</span>`;
+        a.addEventListener('click', ()=>{
+          document.getElementById('category').value = c.key;
+          applyFilters();
+          window.scrollTo({ top: document.getElementById('grid').offsetTop - 20, behavior: 'smooth' });
+        });
+        chips.appendChild(a);
+      });
 
-  [search, category, sort].forEach(el => el.addEventListener('input', applyFilters));
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+      // Sections
+      document.getElementById('section-best').textContent = t('best');
+      document.getElementById('section-how').textContent = t('how');
+      const steps = document.getElementById('how-steps');
+      steps.innerHTML = "";
+      t('howSteps').forEach(s=>{
+        const d = document.createElement('div');
+        d.className = "step";
+        d.textContent = s;
+        steps.appendChild(d);
+      });
+
+      // Trust
+      document.getElementById('t1').textContent = t('trust')[0];
+      document.getElementById('t2').textContent = t('trust')[1];
+      document.getElementById('t3').textContent = t('trust')[2];
+      document.getElementById('t4').textContent = t('trust')[3];
+
+      // Footer
+      document.getElementById('footer-title').textContent = t('footerTitle');
+      document.getElementById('footer-policy').textContent = t('footerPolicy');
+      document.getElementById('footer-contact').innerHTML = t('footerContact');
+
+      // Buttons state
+      document.getElementById('btn-fr').classList.toggle('active', LANG==='fr');
+      document.getElementById('btn-ar').classList.toggle('active', LANG==='ar');
+    }
+
+    // Render a product card (uses FR/AR fields if present)
+    function cardHTML(p){
+      const name = p[`name_${LANG}`] || p.name;
+      const desc = p[`desc_${LANG}`] || p.description || "";
+      const eta = p.eta || "";
+      const preorder = p.preorder ? `<span class="badge warn">${t('preorder')}</span>` : "";
+      const img = (p.images && p.images[0]) ? p.images[0] : "assets/placeholder.jpg";
+      const cat = catLabel(p.category || "");
+      return `
+        <article class="card">
+          <div class="thumb">
+            <img loading="lazy" src="${img}" alt="${name}">
+            ${preorder}
+            ${eta ? `<span class="badge">${eta}</span>` : ""}
+          </div>
+          <div class="card-body">
+            <h3 title="${name}">${name}</h3>
+            <p class="price">${fmt(p.price_mru)} <span class="cur">${CURRENCY}</span></p>
+            <p class="muted small">${cat}</p>
+            <p class="desc">${desc}</p>
+            <a class="btn" href="${waLink(p)}" target="_blank" rel="noopener">${t('orderBtn')}</a>
+          </div>
+        </article>`;
+    }
+
+    let PRODUCTS = [];
+
+    function applyFilters(){
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const catVal = document.getElementById('category').value;
+      const sortVal = document.getElementById('sort').value;
+
+      let items = PRODUCTS.slice();
+
+      if (q) items = items.filter(p => {
+        const name = (p[`name_${LANG}`] || p.name || "").toLowerCase();
+        const desc = (p[`desc_${LANG}`] || p.description || "").toLowerCase();
+        return name.includes(q) || desc.includes(q);
+      });
+
+      if (catVal) items = items.filter(p => (p.category === catVal));
+
+      if (sortVal === "price-asc") items.sort((a,b)=> a.price_mru - b.price_mru);
+      if (sortVal === "price-desc") items.sort((a,b)=> b.price_mru - a.price_mru);
+      if (sortVal === "newest") items.sort((a,b)=> (b.created||0) - (a.created||0));
+
+      const grid = document.getElementById('grid');
+      grid.innerHTML = items.map(cardHTML).join("");
+
+      const empty = document.getElementById('empty');
+      empty.hidden = items.length !== 0;
+      if (items.length === 0) empty.textContent = t('empty');
+    }
+    window.applyFilters = applyFilters;
+
+    // Language switch handlers
+    document.getElementById('btn-fr').onclick = ()=>{ LANG='fr'; renderStaticText(); applyFilters(); };
+    document.getElementById('btn-ar').onclick = ()=>{ LANG='ar'; renderStaticText(); applyFilters(); };
+
+    // Initial render
+    renderStaticText();
+
+    // Load products.json
+    fetch('products.json')
+      .then(r => r.json())
+      .then(data => { PRODUCTS = data; applyFilters(); })
+      .catch(()=> {
+        const empty = document.getElementById('empty');
+        empty.hidden = false;
+        empty.textContent = "Impossible de charger products.json / تعذر تحميل products.json";
+      });
+
+    // Update labels for inputs after language render
+    document.getElementById('search').addEventListener('input', applyFilters);
+    document.getElementById('category').addEventListener('input', applyFilters);
+    document.getElementById('sort').addEventListener('input', applyFilters);
+  </script>
 </body>
 </html>
