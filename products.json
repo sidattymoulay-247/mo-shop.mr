@@ -2,46 +2,61 @@
   {
     "id": "BAG-701",
     "name": "Classic Backpack (Unisex, 25L)",
+    "name_fr": "Sac à dos classique (Unisexe, 25 L)",
+    "name_ar": "حقيبة ظهر كلاسيكية (للجنسين، 25 لتر)",
     "category": "Fashion & Gifts",
     "price_mru": 2400,
     "eta": "Standard 14–25d",
     "preorder": false,
     "description": "Durable fabric, padded straps, front zip pocket; ideal for school or commuting.",
+    "desc_fr": "Tissu résistant, bretelles rembourrées, poche avant zippée ; idéal pour l’école ou les trajets.",
+    "desc_ar": "قماش متين، أحزمة مبطنة، جيب أمامي بسحاب؛ مثالي للدراسة أو التنقل اليومي.",
     "images": ["assets/bags.jpeg"],
     "created": 20250901
   },
   {
     "id": "BAG-720",
     "name": "Travel Cosmetic Organizer Bag",
+    "name_fr": "Trousse de toilette de voyage (organiseur)",
+    "name_ar": "حقيبة تنظيم مستحضرات التجميل للسفر",
     "category": "Home & Kitchen",
     "price_mru": 1500,
     "eta": "Express 8–12d",
     "preorder": false,
     "description": "Large-capacity toiletries/makeup bag with multiple compartments; water-resistant.",
+    "desc_fr": "Grande capacité avec multiples compartiments pour toilette/maquillage ; résistante à l’eau.",
+    "desc_ar": "سعة كبيرة مع عدة أقسام لمستحضرات النظافة والتجميل؛ مقاومة للماء.",
     "images": ["assets/bag-home.jpg"],
     "created": 20250901
   },
   {
     "id": "PWR-310",
     "name": "30000mAh Power Bank with Built-in Cables",
+    "name_fr": "Batterie externe 30000 mAh avec câbles intégrés",
+    "name_ar": "باوربانك 30000mAh مع كابلات مدمجة",
     "category": "Phones & Accessories",
     "price_mru": 2200,
     "eta": "Express 8–12d",
     "preorder": false,
     "description": "High-capacity power bank with digital display, built-in USB-C/Lightning/Micro-USB cables, and flashlight.",
+    "desc_fr": "Batterie haute capacité avec afficheur numérique, câbles USB-C/Lightning/Micro-USB intégrés et lampe torche.",
+    "desc_ar": "بطارية محمولة بسعة كبيرة مع شاشة رقمية، وكابلات USB-C/Lightning/Micro-USB مدمجة، ومصباح يدوي.",
     "images": ["assets/powerbank.jpg"],
     "created": 20250901
   },
   {
     "id": "CHG-210",
     "name": "3-in-1 Wireless Charging Station (Phone/Watch/Buds)",
+    "name_fr": "Station de charge sans fil 3-en-1 (téléphone/montre/écouteurs)",
+    "name_ar": "قاعدة شحن لاسلكية 3 في 1 (هاتف/ساعة/سماعات)",
     "category": "Phones & Accessories",
     "price_mru": 1800,
     "eta": "Standard 14–25d",
     "preorder": false,
     "description": "Fast Qi wireless dock for phone, smartwatch, and earbuds—keeps your desk tidy.",
+    "desc_fr": "Base Qi rapide pour téléphone, montre connectée et écouteurs — garde votre bureau ordonné.",
+    "desc_ar": "منصة شحن Qi سريعة للهاتف والساعة والسماعات — تبقي مكتبك مرتبًا.",
     "images": ["assets/wireless.jpeg"],
     "created": 20250901
   }
 ]
-
